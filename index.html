@@ -21,9 +21,8 @@
           },
           colors: {
             shn: {
-              bg: '#050507',
-              card: '#0d0d12',
-              border: 'rgba(255, 255, 255, 0.08)',
+              bg: '#050608',
+              card: '#0d0f16',
               red: '#ff0033',
               crimson: '#e6002e',
               muted: '#8e8e99'
@@ -34,27 +33,27 @@
     }
   </script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
   <style>
     :root {
       --sat: env(safe-area-inset-top, 0px);
       --sab: env(safe-area-inset-bottom, 0px);
     }
     body {
-      background-color: #050507;
+      background-color: #050608;
       color: #f5f5f7;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
     
-    #canvas-container {
+    /* Canvas da Sequência de Frames Apple */
+    #hero-lightpass {
       position: fixed;
       inset: 0;
       width: 100vw;
       height: 100vh;
       z-index: 5;
       pointer-events: none;
+      object-fit: cover;
     }
 
     .scroll-progress-line {
@@ -62,15 +61,16 @@
       top: 0;
       left: 0;
       height: 3px;
-      background: linear-gradient(90deg, #ff0033, #ff4d6d);
+      background: linear-gradient(90deg, #ff0033, #00f0ff);
       z-index: 100;
       width: 0%;
       box-shadow: 0 0 12px rgba(255, 0, 51, 0.8);
     }
 
+    /* Seções com altura proporcional para rolagem cinematográfica */
     .story-section {
       position: relative;
-      min-height: 110vh;
+      min-height: 115vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -83,16 +83,16 @@
     }
 
     .apple-gradient-text {
-      background: linear-gradient(180deg, #ffffff 40%, #a1a1a8 100%);
+      background: linear-gradient(180deg, #ffffff 30%, #a1a1a8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .glass-panel {
-      background: rgba(13, 13, 18, 0.82);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(13, 15, 22, 0.84);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 0, 51, 0.06);
     }
   </style>
@@ -102,13 +102,12 @@
   <div id="scroll-progress" class="scroll-progress-line"></div>
 
   <!-- Header Fixo Estilo Apple com Marca da SHNorth -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-[#050507]/80 backdrop-blur-xl border-b border-white/10" style="padding-top: var(--sat);">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#050608]/85 backdrop-blur-xl border-b border-white/10" style="padding-top: var(--sat);">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       
       <!-- Logo SHNorth -->
       <a href="#" class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-lg bg-black border border-white/15 flex items-center justify-center relative shadow-lg shadow-shn-red/20">
-          <!-- Bússola estilizada North -->
           <svg class="w-5 h-5 text-shn-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="9" class="stroke-white/30" />
             <polygon points="12 4 15 12 12 10 9 12 12 4" fill="#ff0033" stroke="none" />
@@ -132,7 +131,7 @@
 
       <!-- CTA -->
       <div>
-        <a href="#contato" class="px-3.5 py-1.5 sm:px-5 sm:py-2 bg-shn-red hover:bg-red-600 active:scale-95 text-white text-[11px] sm:text-xs font-bold rounded-full transition-all shadow-lg shadow-shn-red/30 cursor-pointer whitespace-nowrap">
+        <a href="https://wa.me/5551989871325?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20as%20solu%C3%A7%C3%B5es%20da%20Software%20House%20North." target="_blank" class="px-4 py-1.5 sm:px-5 sm:py-2 bg-shn-red hover:bg-red-600 active:scale-95 text-white text-[11px] sm:text-xs font-bold rounded-full transition-all shadow-lg shadow-shn-red/30 cursor-pointer whitespace-nowrap">
           <span class="sm:hidden">Contato</span>
           <span class="hidden sm:inline">Falar com Especialista</span>
         </a>
@@ -140,16 +139,18 @@
     </div>
   </header>
 
-  <!-- Canvas WebGL 3D Fixo (Bússola / Núcleo SHNorth) -->
-  <div id="canvas-container"></div>
+  <!-- =========================================================================
+       CANVAS SCROLLYTELLING DA APPLE (72 FRAMES EM WEBP DE ESTÚDIO)
+       ========================================================================= -->
+  <canvas id="hero-lightpass"></canvas>
 
   <!-- =========================================================================
-       NARRATIVA POR DOBRAS (O SCROLL CONDUZ A HISTÓRIA)
+       NARRATIVA POR DOBRAS (SINCRONIZADA COM A DESCONSTRUÇÃO DO SOFTWARE)
        ========================================================================= -->
 
-  <!-- DOBRA 1: HERO (0% - 25%) -->
+  <!-- DOBRA 1: HERO (0% a 25%) -->
   <section class="story-section max-w-5xl mx-auto text-center items-center">
-    <div class="story-card max-w-3xl mx-auto pt-20">
+    <div class="story-card max-w-3xl mx-auto pt-24 sm:pt-20">
       <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-shn-red/15 border border-shn-red/30 text-shn-red font-mono text-xs font-bold tracking-wider mb-5">
         <span class="w-2 h-2 rounded-full bg-shn-red animate-pulse"></span>
         ENGENHARIA DE SOFTWARE & AUTOMAÇÃO IA
@@ -161,81 +162,77 @@
       </h1>
       
       <p class="text-sm sm:text-xl text-zinc-300 max-w-xl mx-auto font-normal leading-relaxed mb-8">
-        Da automação de processos inteligentes ao desenvolvimento sob medida. Tecnologia que simplifica, acelera e multiplica resultados.
+        Da automação inteligente de processos ao desenvolvimento de plataformas sob medida. Tecnologia corporativa de alto desempenho.
       </p>
 
       <div class="inline-flex items-center gap-2 font-mono text-xs text-zinc-400 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full backdrop-blur">
-        <span>Role para desconstruir nossa arquitetura</span>
+        <span>Role para desconstruir nossa suíte de sistemas</span>
         <span class="text-shn-red animate-bounce">↓</span>
       </div>
     </div>
   </section>
 
-  <!-- DOBRA 2: METODOLOGIA & FUNDAÇÃO (Card na Esquerda, 3D na Direita) -->
-  <section class="story-section max-w-6xl mx-auto items-start justify-center sm:justify-center">
+  <!-- DOBRA 2: ANALYTICS EM TEMPO REAL (Card na Esquerda, 3D na Direita) -->
+  <section class="story-section max-w-6xl mx-auto items-start justify-center">
     <div class="story-card glass-panel w-full max-w-sm sm:max-w-md p-6 sm:p-8 rounded-3xl text-left mt-auto sm:mt-0 mb-8 sm:mb-0">
-      <div class="inline-block px-2.5 py-0.5 rounded bg-shn-red/20 text-shn-red font-mono text-[11px] font-bold tracking-wider mb-3">
-        01 · METODOLOGIA NORTH
+      <div class="inline-block px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-400 font-mono text-[11px] font-bold tracking-wider mb-3">
+        01 · ANALYTICS EM TEMPO REAL
       </div>
       <h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-3 leading-snug">
-        Descoberta real.<br>
-        <span class="text-zinc-400">Antes de qualquer código.</span>
+        Métricas que governam<br>
+        <span class="text-zinc-400">sua operação.</span>
       </h2>
       <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-5 font-normal">
-        Ouvimos suas dores, mapeamos os gargalos operacionais e desenhamos a solução perfeita para a realidade da sua empresa. Sem jargões técnicos vazios.
+        Dashboards executivos com fluxo de faturamento ao vivo, telemetria de microsserviços e 99.98% de SLA garantido. Seus dados consolidados em microssegundos.
       </p>
       <div class="grid grid-cols-2 gap-3 pt-3 border-t border-white/10 font-mono">
         <div>
-          <div class="text-[10px] text-zinc-400 uppercase">Eficiência</div>
-          <div class="text-lg font-bold text-white">+48.9%</div>
+          <div class="text-[10px] text-zinc-400 uppercase">Faturamento Integrado</div>
+          <div class="text-lg font-bold text-white">+41.8%</div>
         </div>
         <div>
-          <div class="text-[10px] text-zinc-400 uppercase">Tempo Manual</div>
-          <div class="text-lg font-bold text-shn-red">-70%</div>
+          <div class="text-[10px] text-zinc-400 uppercase">Latência Global</div>
+          <div class="text-lg font-bold text-cyan-400">18 ms</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- DOBRA 3: ARQUITETURA EXPLODIDA (Card na Direita, 3D Explodido na Esquerda) -->
-  <section class="story-section max-w-6xl mx-auto items-end justify-center sm:justify-center">
+  <!-- DOBRA 3: ARQUITETURA EM CAMADAS (Card na Direita, 3D Explodido na Esquerda) -->
+  <section class="story-section max-w-6xl mx-auto items-end justify-center">
     <div class="story-card glass-panel w-full max-w-sm sm:max-w-md p-6 sm:p-8 rounded-3xl text-left mt-auto sm:mt-0 mb-8 sm:mb-0">
-      <div class="inline-block px-2.5 py-0.5 rounded bg-red-500/20 text-shn-red font-mono text-[11px] font-bold tracking-wider mb-3">
-        02 · ARQUITETURA EM CAMADAS
+      <div class="inline-block px-2.5 py-0.5 rounded bg-shn-red/20 text-shn-red font-mono text-[11px] font-bold tracking-wider mb-3">
+        02 · ENGENHARIA INTEGRADA
       </div>
       <h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-3 leading-snug">
-        Cinco camadas.<br>
-        <span class="text-zinc-400">Robustez modular.</span>
+        Três motores.<br>
+        <span class="text-zinc-400">Uma plataforma blindada.</span>
       </h2>
       <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-4 font-normal">
-        Nossos sistemas operam de forma isolada e resiliente para sua empresa nunca parar:
+        Nossos sistemas operam de forma isolada, modular e resiliente:
       </p>
       <ul class="space-y-2 font-mono text-[11px] text-zinc-300 border-t border-white/10 pt-3">
         <li class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-white"></span>
-          <span>01. Interfaces Web & PWA de Alto Desempenho</span>
+          <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+          <span>01. Enterprise Analytics & Revenue Hub</span>
         </li>
         <li class="flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-shn-red"></span>
-          <span>02. Agentes de IA & Atendimento WhatsApp</span>
+          <span>02. Agente de IA & Atendimento WhatsApp CRM</span>
         </li>
         <li class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-zinc-300"></span>
-          <span>03. Chassi de Integrações (Make / n8n / APIs)</span>
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span>03. Pipeline de Integrações (APIs, Redis & ERP)</span>
         </li>
         <li class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-          <span>04. Pipelines de Dados & Relatórios em Tempo Real</span>
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-zinc-600"></span>
-          <span>05. Infraestrutura em Nuvem Blindada & Segura</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>04. Infraestrutura Multi-AZ em Nuvem Blindada</span>
         </li>
       </ul>
     </div>
   </section>
 
-  <!-- DOBRA 4: RECOMPOSIÇÃO & CTA (Fechamento) -->
+  <!-- DOBRA 4: RECOMPOSIÇÃO & CTA -->
   <section id="contato" class="story-section max-w-4xl mx-auto text-center items-center pb-24">
     <div class="story-card glass-panel w-full max-w-md sm:max-w-xl mx-auto p-8 sm:p-12 rounded-3xl border border-shn-red/40 shadow-2xl">
       <div class="w-14 h-14 rounded-2xl bg-shn-red/20 text-shn-red border border-shn-red/40 flex items-center justify-center mx-auto mb-5 shadow-[0_0_25px_rgba(255,0,51,0.4)]">
@@ -246,10 +243,10 @@
         </svg>
       </div>
       <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
-        Vamos construir o futuro da sua empresa?
+        Pronto para transformar sua operação?
       </h2>
       <p class="text-xs sm:text-sm text-zinc-300 mb-6 leading-relaxed max-w-sm mx-auto">
-        Converse diretamente com nosso time de engenharia e descubra como automatizar sua operação.
+        Converse diretamente com nosso time de engenharia e descubra como automatizar sua empresa com IA.
       </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
         <a href="https://wa.me/5551989871325?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20as%20solu%C3%A7%C3%B5es%20da%20Software%20House%20North." target="_blank" class="w-full sm:w-auto px-8 py-3.5 bg-shn-red hover:bg-red-600 text-white font-bold text-sm rounded-full shadow-lg shadow-shn-red/30 active:scale-95 transition-all cursor-pointer">
@@ -263,305 +260,94 @@
   </section>
 
   <!-- =========================================================================
-       MOTOR 3D SHNORTH (BÚSSOLA QUÂNTICA & EXPLODED VIEW)
+       MOTOR DE SCROLLYTELLING APPLE (PRELOAD DE WEBP & 60 FPS CANVAS)
        ========================================================================= -->
   <script>
     (() => {
       "use strict";
 
-      const container = document.getElementById('canvas-container');
-      const progressBar = document.getElementById('scroll-progress');
+      const canvas = document.getElementById("hero-lightpass");
+      const context = canvas.getContext("2d");
+      const progressBar = document.getElementById("scroll-progress");
 
-      // 1. Cena, Câmera e Renderizador
-      const scene = new THREE.Scene();
-      const isMobile = window.innerWidth < 768;
-      
-      const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 100);
-      camera.position.set(0, 0, isMobile ? 11 : 8.5);
+      const FRAME_COUNT = 72;
+      const currentFrame = (index) => `frames_webp/frame_${index.toString().padStart(3, '0')}.webp`;
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      container.appendChild(renderer.domElement);
+      const images = [];
+      let loadedCount = 0;
 
-      // 2. Luzes Estilo Estúdio Dark
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-      scene.add(ambientLight);
+      // Ajusta tamanho nativo do Canvas
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        renderCurrentFrame();
+      }
+      window.addEventListener("resize", resizeCanvas);
 
-      // Luz direcional branca suave
-      const keyLight = new THREE.DirectionalLight(0xffffff, 3.2);
-      keyLight.position.set(5, 7, 6);
-      scene.add(keyLight);
+      // Desenha imagem com preenchimento responsivo (cover)
+      function drawImageProp(ctx, img) {
+        if (!img || !img.complete || img.naturalWidth === 0) return;
 
-      // Luz de recorte lateral vermelha carmesim da SHNorth
-      const redRim = new THREE.DirectionalLight(0xff0033, 5.0);
-      redRim.position.set(-6, -4, 4);
-      scene.add(redRim);
+        const cw = canvas.width, ch = canvas.height;
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        const r = Math.max(cw / iw, ch / ih);
+        
+        const nw = iw * r, nh = ih * r;
+        const cx = (cw - nw) * 0.5;
+        const cy = (ch - nh) * 0.5;
 
-      const topLight = new THREE.DirectionalLight(0xff3355, 3.5);
-      topLight.position.set(0, 6, -5);
-      scene.add(topLight);
-
-      // 3. Montagem da Bússola Tecnológica SHNorth em 5 Camadas
-      const masterGroup = new THREE.Group();
-
-      const dialRadius = 1.6;
-
-      // Helper para criar discos com relevo chanfrado
-      function createDiscGeo(radius, thickness) {
-        return new THREE.CylinderGeometry(radius, radius, thickness, 48);
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.drawImage(img, cx, cy, nw, nh);
       }
 
-      // CAMADA 1 (Frente): Cristal de Safira com Anel Graduado
-      const layer1_Glass = new THREE.Group();
-      const glassDisc = new THREE.Mesh(
-        createDiscGeo(dialRadius, 0.04),
-        new THREE.MeshPhysicalMaterial({
-          color: 0xffffff,
-          roughness: 0.05,
-          transmission: 0.85,
-          transparent: true,
-          opacity: 0.7,
-          clearcoat: 1.0
-        })
-      );
-      glassDisc.rotation.x = Math.PI / 2;
-      layer1_Glass.add(glassDisc);
+      let activeIndex = 0;
 
-      // Anel metálico externo de proteção
-      const ringMesh = new THREE.Mesh(
-        new THREE.TorusGeometry(dialRadius * 1.02, 0.035, 16, 64),
-        new THREE.MeshStandardMaterial({
-          color: 0x999999,
-          metalness: 0.95,
-          roughness: 0.1
-        })
-      );
-      layer1_Glass.add(ringMesh);
-      masterGroup.add(layer1_Glass);
-
-      // CAMADA 2: A Agulha Bússola Vermelha (Símbolo North) + Dial Marcador
-      const layer2_Compass = new THREE.Group();
-      
-      // Ponteiro Norte (Vermelho Vibrante da SHNorth)
-      const northArrowGeo = new THREE.ConeGeometry(0.35, 1.3, 4);
-      const northArrowMat = new THREE.MeshStandardMaterial({
-        color: 0xff0033,
-        emissive: 0xff002b,
-        emissiveIntensity: 0.8,
-        metalness: 0.8,
-        roughness: 0.2
-      });
-      const northArrow = new THREE.Mesh(northArrowGeo, northArrowMat);
-      northArrow.rotation.z = Math.PI;
-      northArrow.position.y = 0.65;
-      northArrow.scale.set(1, 1, 0.2); // Fino
-      layer2_Compass.add(northArrow);
-
-      // Ponteiro Sul (Branco/Cinza Metálico)
-      const southArrowGeo = new THREE.ConeGeometry(0.35, 1.3, 4);
-      const southArrowMat = new THREE.MeshStandardMaterial({
-        color: 0xf5f5f7,
-        metalness: 0.9,
-        roughness: 0.2
-      });
-      const southArrow = new THREE.Mesh(southArrowGeo, southArrowMat);
-      southArrow.position.y = -0.65;
-      southArrow.scale.set(1, 1, 0.2);
-      layer2_Compass.add(southArrow);
-
-      // Núcleo central do pivô da bússola
-      const pivot = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.2, 0.2, 0.15, 32),
-        new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.95, roughness: 0.1 })
-      );
-      pivot.rotation.x = Math.PI / 2;
-      layer2_Compass.add(pivot);
-
-      masterGroup.add(layer2_Compass);
-
-      // CAMADA 3 (Centro): Matriz Neural de Chips & Circuitos
-      const layer3_Neural = new THREE.Group();
-      const neuralDisc = new THREE.Mesh(
-        createDiscGeo(dialRadius * 0.96, 0.06),
-        new THREE.MeshStandardMaterial({
-          color: 0x111319,
-          metalness: 0.85,
-          roughness: 0.2
-        })
-      );
-      neuralDisc.rotation.x = Math.PI / 2;
-      layer3_Neural.add(neuralDisc);
-
-      // Anel de dados gravado
-      const innerDataRing = new THREE.Mesh(
-        new THREE.RingGeometry(0.6, 0.85, 32),
-        new THREE.MeshBasicMaterial({ color: 0xff0033, wireframe: true, transparent: true, opacity: 0.4 })
-      );
-      layer3_Neural.add(innerDataRing);
-      masterGroup.add(layer3_Neural);
-
-      // CAMADA 4: Chassi Unibody de Titânio Cinza Escovado
-      const layer4_Chassis = new THREE.Mesh(
-        createDiscGeo(dialRadius * 1.05, 0.12),
-        new THREE.MeshStandardMaterial({
-          color: 0x484c58,
-          metalness: 0.95,
-          roughness: 0.15
-        })
-      );
-      layer4_Chassis.rotation.x = Math.PI / 2;
-      masterGroup.add(layer4_Chassis);
-
-      // CAMADA 5 (Base Traseira): Base Cerâmica em Obsidiana
-      const layer5_Base = new THREE.Mesh(
-        createDiscGeo(dialRadius * 1.02, 0.08),
-        new THREE.MeshPhysicalMaterial({
-          color: 0x0a0a0d,
-          metalness: 0.9,
-          roughness: 0.1,
-          clearcoat: 0.8
-        })
-      );
-      layer5_Base.rotation.x = Math.PI / 2;
-      masterGroup.add(layer5_Base);
-
-      // Efeito de estrelas/partículas de fundo da SHNorth
-      const starGeo = new THREE.BufferGeometry();
-      const starCount = 200;
-      const starPos = new Float32Array(starCount * 3);
-      for(let i = 0; i < starCount * 3; i += 3) {
-        starPos[i] = (Math.random() - 0.5) * 16;
-        starPos[i+1] = (Math.random() - 0.5) * 16;
-        starPos[i+2] = (Math.random() - 0.5) * 10 - 2;
+      function renderCurrentFrame() {
+        const img = images[activeIndex];
+        if (img && img.complete) {
+          drawImageProp(context, img);
+        }
       }
-      starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-      const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.035, transparent: true, opacity: 0.5 });
-      const starField = new THREE.Points(starGeo, starMat);
-      scene.add(starField);
 
-      scene.add(masterGroup);
-      window.debugThree = { masterGroup, camera, scene };
+      // Preload de todos os 72 frames em memória
+      for (let i = 0; i < FRAME_COUNT; i++) {
+        const img = new Image();
+        img.src = currentFrame(i);
+        img.onload = () => {
+          loadedCount++;
+          if (i === 0) {
+            resizeCanvas();
+          }
+        };
+        images.push(img);
+      }
 
-      // 4. Mecânica de Scroll Progressivo
-      let targetProgress = 0;
-      let currentProgress = 0;
+      // Listener de Scroll de Alto Desempenho
+      let ticking = false;
 
       function onScroll() {
         const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        targetProgress = Math.max(0, Math.min(1, window.scrollY / (totalHeight || 1)));
+        const progress = Math.max(0, Math.min(1, window.scrollY / (totalHeight || 1)));
+
         if (progressBar) {
-          progressBar.style.width = (targetProgress * 100) + '%';
-        }
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-
-      window.addEventListener('resize', () => {
-        const mobileNow = window.innerWidth < 768;
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.position.z = mobileNow ? 11 : 8.5;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      });
-
-      // 5. Loop de Animação 60 FPS
-      const clock = new THREE.Clock();
-
-      function animate() {
-        requestAnimationFrame(animate);
-        const delta = clock.getDelta();
-
-        // Inércia suave de scroll
-        currentProgress += (targetProgress - currentProgress) * 0.25;
-        const p = currentProgress;
-
-        function smoothstep(min, max, value) {
-          const x = Math.max(0, Math.min(1, (value - min) / (max - min)));
-          return x * x * (3 - 2 * x);
+          progressBar.style.width = (progress * 100) + '%';
         }
 
-        const mobile = window.innerWidth < 768;
-        
-        let rotX = 0, rotY = 0, rotZ = 0;
-        let posX = 0, posY = 0;
-        let explodeDist = 0;
-
-        if (p < 0.25) {
-          // DOBRA 1: Centro Hero
-          const t = p / 0.25;
-          rotY = t * 0.35;
-          rotX = t * 0.2;
-          posX = 0;
-          posY = mobile ? 0.7 : 0;
-          explodeDist = 0;
-        } else if (p < 0.50) {
-          // DOBRA 2: Chassi Titânio (Desktop: DIREITA +2.4; Mobile: TOPO)
-          const t = (p - 0.25) / 0.25;
-          const shift = smoothstep(0, 0.4, t);
-          rotY = 0.35 + t * 0.8;
-          rotX = 0.2 + t * 0.15;
-          posX = mobile ? 0 : (2.4 * shift);
-          posY = mobile ? (0.7 + 1.45 * shift) : 0;
-          explodeDist = 0;
-        } else if (p < 0.75) {
-          // DOBRA 3: VISÃO EXPLODIDA (EXPLODED VIEW)
-          const t = (p - 0.50) / 0.25;
-          const shift = smoothstep(0, 0.35, t);
-          const expl = smoothstep(0.0, 0.45, t); // Abre rápido no início da dobra
-          
-          if (mobile) {
-            // No iPhone: escala calibrada (0.58) e posY elevado para flutuar 100% livre acima do card
-            rotY = 0.15;
-            rotX = 0.72; // Inclinação elegante revelando a face e os anéis concêntricos
-            rotZ = 0.05;
-            posX = 0;
-            posY = 2.15; // Sobe o objeto para centralizar no espaço entre header e card sem corte inferior
-            explodeDist = expl * 1.35; // Separação equilibrada
-          } else {
-            // Desktop: Trava na esquerda (-2.4)
-            rotY = 1.15 - t * 0.65;
-            rotX = 0.35 + t * 0.25;
-            rotZ = t * 0.15;
-            posX = 2.4 - shift * 4.8;
-            posY = 0;
-            explodeDist = expl * 2.5;
+        const frameIndex = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT));
+        if (frameIndex !== activeIndex) {
+          activeIndex = frameIndex;
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              renderCurrentFrame();
+              ticking = false;
+            });
+            ticking = true;
           }
-        } else {
-          // DOBRA 4: Recomposição e Centro
-          const t = (p - 0.75) / 0.25;
-          const shift = smoothstep(0, 0.4, t);
-          rotY = 0.4 + t * 0.6;
-          rotX = 0.5 - t * 0.3;
-          rotZ = 0.15 * (1 - t);
-          posX = mobile ? 0 : (-2.4 * (1 - shift));
-          posY = mobile ? (2.15 * (1 - shift)) : 0;
-          explodeDist = (1 - smoothstep(0, 0.5, t)) * 2.5;
         }
-
-        // Aplica transformações
-        const scaleVal = mobile ? 0.58 : 1.0;
-        masterGroup.scale.set(scaleVal, scaleVal, scaleVal);
-        masterGroup.rotation.y = rotY;
-        masterGroup.rotation.x = rotX;
-        masterGroup.rotation.z = rotZ + Math.sin(clock.getElapsedTime() * 0.8) * 0.02;
-        masterGroup.position.x = posX;
-        masterGroup.position.y = posY;
-
-        // Animação da Visão Explodida
-        layer1_Glass.position.z = explodeDist * 1.6;
-        layer2_Compass.position.z = explodeDist * 0.8;
-        layer3_Neural.position.z = 0;
-        layer4_Chassis.position.z = -explodeDist * 0.8;
-        layer5_Base.position.z = -explodeDist * 1.6;
-
-        // Pulso do ponteiro vermelho da SHNorth
-        northArrowMat.emissiveIntensity = 0.6 + Math.sin(clock.getElapsedTime() * 3) * 0.3;
-
-        renderer.render(scene, camera);
       }
 
-      animate();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      resizeCanvas();
     })();
   </script>
 
