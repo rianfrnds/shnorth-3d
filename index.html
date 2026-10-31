@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -22,9 +22,13 @@
           colors: {
             shn: {
               bg: '#050608',
-              card: '#0d0f16',
+              surface: '#0d0f17',
+              border: 'rgba(255, 255, 255, 0.08)',
               red: '#ff0033',
               crimson: '#e6002e',
+              cyan: '#00f0ff',
+              emerald: '#10b981',
+              amber: '#f59e0b',
               muted: '#8e8e99'
             }
           }
@@ -43,19 +47,9 @@
       color: #f5f5f7;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     
-    /* Canvas da Sequência de Frames Apple */
-    #hero-lightpass {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 5;
-      pointer-events: none;
-      object-fit: cover;
-    }
-
     .scroll-progress-line {
       position: fixed;
       top: 0;
@@ -67,33 +61,27 @@
       box-shadow: 0 0 12px rgba(255, 0, 51, 0.8);
     }
 
-    /* Seções com altura proporcional para rolagem cinematográfica */
-    .story-section {
-      position: relative;
-      min-height: 115vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 2rem 1.5rem;
-      z-index: 20;
-      pointer-events: none;
-    }
-    .story-card {
-      pointer-events: auto;
-    }
-
     .apple-gradient-text {
-      background: linear-gradient(180deg, #ffffff 30%, #a1a1a8 100%);
+      background: linear-gradient(180deg, #ffffff 40%, #a1a1a8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .glass-panel {
-      background: rgba(13, 15, 22, 0.84);
+    .glass-card {
+      background: rgba(13, 15, 23, 0.92);
       backdrop-filter: blur(28px);
       -webkit-backdrop-filter: blur(28px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 0, 51, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .glass-card-interactive {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card-interactive:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 0, 51, 0.12);
+      transform: translateY(-2px);
     }
   </style>
 </head>
@@ -102,7 +90,7 @@
   <div id="scroll-progress" class="scroll-progress-line"></div>
 
   <!-- Header Fixo Estilo Apple com Marca da SHNorth -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-[#050608]/85 backdrop-blur-xl border-b border-white/10" style="padding-top: var(--sat);">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-[#050608]/95 backdrop-blur-2xl border-b border-white/10" style="padding-top: var(--sat);">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       
       <!-- Logo SHNorth -->
@@ -122,11 +110,11 @@
 
       <!-- Menu Central -->
       <div class="font-mono text-xs text-zinc-400 hidden md:flex items-center gap-6">
-        <span>SISTEMAS</span>
+        <a href="#analytics" class="hover:text-white transition-colors">ANALYTICS</a>
         <span>•</span>
-        <span>AUTOMAÇÕES IA</span>
+        <a href="#ia-whatsapp" class="hover:text-white transition-colors">AUTOMAÇÕES IA</a>
         <span>•</span>
-        <span>CONSULTORIA</span>
+        <a href="#integracoes" class="hover:text-white transition-colors">INTEGRAÇÕES</a>
       </div>
 
       <!-- CTA -->
@@ -140,18 +128,17 @@
   </header>
 
   <!-- =========================================================================
-       CANVAS SCROLLYTELLING DA APPLE (72 FRAMES EM WEBP DE ESTÚDIO)
+       SEÇÃO 1: HERO (IMPACTO & REVENUE HUB)
        ========================================================================= -->
-  <canvas id="hero-lightpass"></canvas>
+  <section class="min-h-screen pt-28 pb-16 px-4 sm:px-6 flex flex-col items-center justify-center relative overflow-hidden">
+    
+    <!-- Background Glow Sutil -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-shn-red/10 blur-[130px] rounded-full pointer-events-none -z-10"></div>
+    <div class="absolute top-1/3 left-1/3 w-[400px] h-[300px] bg-shn-cyan/5 blur-[120px] rounded-full pointer-events-none -z-10"></div>
 
-  <!-- =========================================================================
-       NARRATIVA POR DOBRAS (SINCRONIZADA COM A DESCONSTRUÇÃO DO SOFTWARE)
-       ========================================================================= -->
-
-  <!-- DOBRA 1: HERO (0% a 25%) -->
-  <section class="story-section max-w-5xl mx-auto text-center items-center">
-    <div class="story-card max-w-3xl mx-auto pt-24 sm:pt-20">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-shn-red/15 border border-shn-red/30 text-shn-red font-mono text-xs font-bold tracking-wider mb-5">
+    <!-- Textos Hero -->
+    <div class="max-w-3xl mx-auto text-center mb-10">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-500/15 border border-red-500/35 text-red-400 font-mono text-xs font-bold shadow-sm tracking-wider mb-5">
         <span class="w-2 h-2 rounded-full bg-shn-red animate-pulse"></span>
         ENGENHARIA DE SOFTWARE & AUTOMAÇÃO IA
       </div>
@@ -165,189 +152,383 @@
         Da automação inteligente de processos ao desenvolvimento de plataformas sob medida. Tecnologia corporativa de alto desempenho.
       </p>
 
-      <div class="inline-flex items-center gap-2 font-mono text-xs text-zinc-400 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full backdrop-blur">
-        <span>Role para desconstruir nossa suíte de sistemas</span>
-        <span class="text-shn-red animate-bounce">↓</span>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="https://wa.me/5551989871325?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20as%20solu%C3%A7%C3%B5es%20da%20Software%20House%20North." target="_blank" class="w-full sm:w-auto px-8 py-3.5 bg-shn-red hover:bg-red-600 text-white font-bold text-sm rounded-full shadow-lg shadow-shn-red/30 active:scale-95 transition-all">
+          Solicitar Diagnóstico Técnico
+        </a>
+        <a href="#analytics" class="w-full sm:w-auto px-6 py-3.5 bg-white/5 hover:bg-white/10 text-white font-mono text-xs rounded-full border border-white/10 transition-all flex items-center justify-center gap-2">
+          <span>Explorar Sistemas</span>
+          <span class="text-shn-red">↓</span>
+        </a>
       </div>
     </div>
-  </section>
 
-  <!-- DOBRA 2: ANALYTICS EM TEMPO REAL (Card na Esquerda, 3D na Direita) -->
-  <section class="story-section max-w-6xl mx-auto items-start justify-center">
-    <div class="story-card glass-panel w-full max-w-sm sm:max-w-md p-6 sm:p-8 rounded-3xl text-left mt-auto sm:mt-0 mb-8 sm:mb-0">
-      <div class="inline-block px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-400 font-mono text-[11px] font-bold tracking-wider mb-3">
-        01 · ANALYTICS EM TEMPO REAL
-      </div>
-      <h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-3 leading-snug">
-        Métricas que governam<br>
-        <span class="text-zinc-400">sua operação.</span>
-      </h2>
-      <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-5 font-normal">
-        Dashboards executivos com fluxo de faturamento ao vivo, telemetria de microsserviços e 99.98% de SLA garantido. Seus dados consolidados em microssegundos.
-      </p>
-      <div class="grid grid-cols-2 gap-3 pt-3 border-t border-white/10 font-mono">
-        <div>
-          <div class="text-[10px] text-zinc-400 uppercase">Faturamento Integrado</div>
-          <div class="text-lg font-bold text-white">+41.8%</div>
+    <!-- MOCKUP NATIVO 1: ENTERPRISE ANALYTICS & REVENUE HUB -->
+    <div id="analytics" class="w-full max-w-5xl mx-auto glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden">
+      <!-- Janela macOS Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <span class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-[#ff5f56]"></span>
+            <span class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-[#febc2e]"></span>
+            <span class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full bg-[#27c93f]"></span>
+          </div>
+          <span class="font-mono text-[11px] sm:text-xs text-zinc-300 font-semibold tracking-wider truncate"><span class="sm:hidden">SHNORTH // REVENUE HUB</span><span class="hidden sm:inline">SHNORTH // ENTERPRISE ANALYTICS & REVENUE HUB</span></span>
         </div>
-        <div>
-          <div class="text-[10px] text-zinc-400 uppercase">Latência Global</div>
-          <div class="text-lg font-bold text-cyan-400">18 ms</div>
+        <div class="flex items-center gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] sm:text-xs font-mono font-bold whitespace-nowrap">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="sm:hidden">ATIVO</span>
+          <span class="hidden sm:inline">SISTEMA EM PRODUÇÃO</span>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- DOBRA 3: ARQUITETURA EM CAMADAS (Card na Direita, 3D Explodido na Esquerda) -->
-  <section class="story-section max-w-6xl mx-auto items-end justify-center">
-    <div class="story-card glass-panel w-full max-w-sm sm:max-w-md p-6 sm:p-8 rounded-3xl text-left mt-auto sm:mt-0 mb-8 sm:mb-0">
-      <div class="inline-block px-2.5 py-0.5 rounded bg-shn-red/20 text-shn-red font-mono text-[11px] font-bold tracking-wider mb-3">
-        02 · ENGENHARIA INTEGRADA
+      <!-- 3 KPIs Principais -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 my-5">
+        <div class="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="text-[10px] sm:text-[11px] font-mono uppercase text-zinc-400 tracking-wider">Faturamento Integrado</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white mt-1">R$ 384.250</div>
+          <div class="text-xs font-mono text-emerald-400 mt-2 font-bold flex items-center gap-1">
+            <span>↑ +41.8%</span>
+            <span class="text-zinc-500 font-normal">vs mês anterior</span>
+          </div>
+        </div>
+        <div class="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="text-[10px] sm:text-[11px] font-mono uppercase text-zinc-400 tracking-wider">Tempo Operacional Poupado</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white mt-1">1.420 hrs</div>
+          <div class="text-xs font-mono text-cyan-400 mt-2 font-bold flex items-center gap-1">
+            <span>↓ -72.4%</span>
+            <span class="text-zinc-500 font-normal">tempo manual</span>
+          </div>
+        </div>
+        <div class="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10">
+          <div class="text-[10px] sm:text-[11px] font-mono uppercase text-zinc-400 tracking-wider">Latência Média & Uptime</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white mt-1">18 ms</div>
+          <div class="text-xs font-mono text-emerald-400 mt-2 font-bold flex items-center gap-1">
+            <span>● 99.98%</span>
+            <span class="text-zinc-500 font-normal">SLA garantido</span>
+          </div>
+        </div>
       </div>
-      <h2 class="text-2xl sm:text-4xl font-bold text-white tracking-tight mb-3 leading-snug">
-        Três motores.<br>
-        <span class="text-zinc-400">Uma plataforma blindada.</span>
-      </h2>
-      <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed mb-4 font-normal">
-        Nossos sistemas operam de forma isolada, modular e resiliente:
-      </p>
-      <ul class="space-y-2 font-mono text-[11px] text-zinc-300 border-t border-white/10 pt-3">
-        <li class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-          <span>01. Enterprise Analytics & Revenue Hub</span>
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-shn-red"></span>
-          <span>02. Agente de IA & Atendimento WhatsApp CRM</span>
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-          <span>03. Pipeline de Integrações (APIs, Redis & ERP)</span>
-        </li>
-        <li class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>04. Infraestrutura Multi-AZ em Nuvem Blindada</span>
-        </li>
-      </ul>
+
+      <!-- Gráfico de Área Ciano em Tempo Real -->
+      <div class="p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-mono text-zinc-300 font-semibold tracking-wider">FLUXO DE TRANSAÇÕES E PROCESSAMENTO EM TEMPO REAL</span>
+          <span class="text-[10px] sm:text-[11px] font-mono text-zinc-500">ÚLTIMAS 24 HORAS</span>
+        </div>
+        <div class="h-28 sm:h-36 w-full relative flex items-end">
+          <svg class="w-full h-full overflow-visible" viewBox="0 0 880 120" fill="none" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="cyanGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.0"/>
+              </linearGradient>
+            </defs>
+            <path d="M 0 100 Q 120 85, 200 60 T 400 45 T 600 30 T 800 15 L 880 10 L 880 120 L 0 120 Z" fill="url(#cyanGrad)" />
+            <path d="M 0 100 Q 120 85, 200 60 T 400 45 T 600 30 T 800 15 L 880 10" stroke="#00f0ff" stroke-width="3" stroke-linecap="round" />
+            <circle cx="200" cy="60" r="4" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
+            <circle cx="400" cy="45" r="4" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
+            <circle cx="600" cy="30" r="4" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
+            <circle cx="880" cy="10" r="5" fill="#ff0033" stroke="#ffffff" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="flex justify-between font-mono text-[9px] sm:text-[10px] text-zinc-500 pt-2 border-t border-white/5">
+          <span>00:00</span><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span class="text-cyan-400 font-bold">AGORA (18ms)</span>
+        </div>
+      </div>
+
+      <!-- Rodapé Técnico -->
+      <div class="flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono text-zinc-400 pt-4 mt-2 border-t border-white/10 gap-2">
+        <div class="flex items-center gap-3">
+          <span class="text-emerald-400 font-bold">● POSTGRESQL MULTI-AZ</span>
+          <span>•</span>
+          <span>DOCKER SWARM CLUSTERS</span>
+          <span>•</span>
+          <span class="text-shn-red font-bold">FAILOVER AUTOMÁTICO</span>
+        </div>
+        <div>SOFTWARE HOUSE NORTH · ENTERPRISE SUITE</div>
+      </div>
     </div>
   </section>
 
-  <!-- DOBRA 4: RECOMPOSIÇÃO & CTA -->
-  <section id="contato" class="story-section max-w-4xl mx-auto text-center items-center pb-24">
-    <div class="story-card glass-panel w-full max-w-md sm:max-w-xl mx-auto p-8 sm:p-12 rounded-3xl border border-shn-red/40 shadow-2xl">
-      <div class="w-14 h-14 rounded-2xl bg-shn-red/20 text-shn-red border border-shn-red/40 flex items-center justify-center mx-auto mb-5 shadow-[0_0_25px_rgba(255,0,51,0.4)]">
+  <!-- =========================================================================
+       SEÇÃO 2: AGENTE DE IA & WHATSAPP CRM (ATENDIMENTO AUTÔNOMO)
+       ========================================================================= -->
+  <section id="ia-whatsapp" class="py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-white/5">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      
+      <!-- Lado Esquerdo: Texto de Venda & Autoridade -->
+      <div class="lg:col-span-5">
+        <div class="inline-block px-2.5 py-0.5 rounded bg-shn-red/20 text-shn-red font-mono text-[11px] font-bold tracking-wider mb-4">
+          01 · ATENDIMENTO & VENDAS IA
+        </div>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+          Respostas inteligentes.<br>
+          <span class="text-zinc-400">Em 400 milissegundos.</span>
+        </h2>
+        <p class="text-sm sm:text-base text-zinc-300 leading-relaxed mb-6 font-normal">
+          Não é chatbot básico de botões. Nossos agentes de IA entendem a intenção do cliente, consultam estoque, emitem pedidos no ERP e notificam o diretor comercial em segundos.
+        </p>
+
+        <div class="space-y-3 font-mono text-xs">
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/10">
+            <span class="text-emerald-400 text-base">✓</span>
+            <div>
+              <span class="text-white font-bold">Qualificação de Leads Automática</span>
+              <div class="text-zinc-400 text-[11px]">Lead scoring de 0 a 100 com enriquecimento CNPJ</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/10">
+            <span class="text-cyan-400 text-base">✓</span>
+            <div>
+              <span class="text-white font-bold">Integração Direta com ERPs</span>
+              <div class="text-zinc-400 text-[11px]">Protheus, SAP, Bling, Tiny e bancos SQL</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/10">
+            <span class="text-shn-red text-base">✓</span>
+            <div>
+              <span class="text-white font-bold">Blindagem & LGPD Total</span>
+              <div class="text-zinc-400 text-[11px]">Criptografia ponta a ponta e zero vazamento de dados</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lado Direito: Interface Real do Chat de IA -->
+      <div class="lg:col-span-7 glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-7 shadow-2xl">
+        <!-- Janela Header -->
+        <div class="flex items-center justify-between pb-4 border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#febc2e]"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
+            </div>
+            <span class="font-mono text-[11px] sm:text-xs text-zinc-300 font-semibold truncate"><span class="sm:hidden">SHNORTH // AGENTE IA</span><span class="hidden sm:inline">SHNORTH // AGENTE IA WHATSAPP CRM</span></span>
+          </div>
+          <div class="px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[10px] sm:text-xs font-mono font-bold">
+            RESPOSTA EM 0.4s
+          </div>
+        </div>
+
+        <!-- Chat Conversa Executiva -->
+        <div class="flex flex-col gap-3 my-5">
+          <!-- Mensagem Cliente -->
+          <div class="self-start max-w-md p-3.5 sm:p-4 rounded-2xl bg-zinc-900 border border-white/10 text-xs sm:text-sm text-zinc-200">
+            <div class="font-mono text-[10px] text-zinc-400 mb-1">CLIENTE · DISTRIBUIDORA NACIONAL (14:22)</div>
+            Olá! Precisamos automatizar o recebimento de pedidos no WhatsApp e conectar direto com nosso ERP Protheus. Vocês constroem isso sob medida?
+          </div>
+
+          <!-- Resposta Agente SHNorth -->
+          <div class="self-end max-w-lg p-4 sm:p-5 rounded-2xl bg-[#1a0f14] border border-shn-red/40 text-xs sm:text-sm text-zinc-100 shadow-xl shadow-shn-red/10">
+            <div class="flex items-center justify-between mb-1.5">
+              <div class="font-mono text-[10px] text-shn-red font-bold">● SHNORTH AI CONCIERGE (14:22:00.412)</div>
+              <span class="text-[9px] font-mono text-zinc-400">LATÊNCIA: 412ms</span>
+            </div>
+            Perfeitamente! Desenvolvemos barramentos de mensageria com webhooks resilientes e fila Redis que validam o estoque, emitem o pedido no Protheus e já geram a cobrança no Asaas em menos de 2 segundos.
+            <div class="mt-2.5 pt-2 border-t border-shn-red/20 text-[11px] sm:text-xs text-zinc-300 font-medium">
+              Identifiquei sua empresa pelo CNPJ. Deseja agendar uma sessão com nosso Diretor Técnico para desenhar a arquitetura?
+            </div>
+          </div>
+        </div>
+
+        <!-- Card de Telemetria Inferior -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-white/[0.03] border border-white/10 font-mono text-[11px] sm:text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-zinc-400">LEAD SCORING:</span>
+            <span class="text-emerald-400 font-bold">96 / 100 (ENTERPRISE HIGH-TICKET)</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-zinc-400">ROTA DE DISPARO:</span>
+            <span class="text-white">Alerta automático enviado ao WhatsApp do Diretor Comercial</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-zinc-400">CONFORMIDADE:</span>
+            <span class="text-cyan-400">Criptografia Ponta a Ponta · LGPD Compliant</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SEÇÃO 3: CHASSI DE INTEGRAÇÕES & APIS (RESILIÊNCIA DE DADOS)
+       ========================================================================= -->
+  <section id="integracoes" class="py-24 px-4 sm:px-6 max-w-6xl mx-auto border-t border-white/5">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-block px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-400 font-mono text-[11px] font-bold tracking-wider mb-4">
+        02 · ENGENHARIA DE INTEGRAÇÃO
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+        Conectores de alta velocidade.<br>
+        <span class="text-zinc-400">Zero perda de dados.</span>
+      </h2>
+      <p class="text-sm sm:text-base text-zinc-300">
+        Criamos pipelines assíncronos que conectam suas ferramentas legadas à inteligência artificial de ponta.
+      </p>
+    </div>
+
+    <!-- MOCKUP NATIVO 3: PIPELINE DE DADOS & TELEMETRIA -->
+    <div class="glass-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#febc2e]"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
+          </div>
+          <span class="font-mono text-xs text-zinc-400 font-semibold tracking-wider">SHNORTH // PIPELINE DE INTEGRAÇÃO & WEBSOCKETS</span>
+        </div>
+        <div class="px-3 py-1 rounded-full bg-shn-red/10 border border-shn-red/30 text-shn-red text-xs font-mono font-bold">
+          14.800 REQ / MIN
+        </div>
+      </div>
+
+      <!-- Fluxo de 4 Nós Conectados -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 my-8">
+        <div class="p-4 rounded-2xl bg-zinc-900/90 border border-cyan-400/50 text-center">
+          <div class="text-[10px] font-mono text-cyan-400 font-bold mb-1">01 · ORIGEM</div>
+          <div class="font-bold text-sm text-white">WEBHOOKS</div>
+          <div class="text-[11px] text-zinc-400 mt-1">APIs / Lojas / CRMs</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-zinc-900/90 border border-amber-400/50 text-center">
+          <div class="text-[10px] font-mono text-amber-400 font-bold mb-1">02 · FILA</div>
+          <div class="font-bold text-sm text-white">REDIS BUFFER</div>
+          <div class="text-[11px] text-zinc-400 mt-1">Zero perda de eventos</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-[#221015] border border-shn-red text-center shadow-lg shadow-shn-red/20">
+          <div class="text-[10px] font-mono text-shn-red font-bold mb-1">03 · MOTOR</div>
+          <div class="font-bold text-sm text-white">IA WORKER</div>
+          <div class="text-[11px] text-zinc-300 mt-1">Validação & Triagem</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-zinc-900/90 border border-emerald-400/50 text-center">
+          <div class="text-[10px] font-mono text-emerald-400 font-bold mb-1">04 · DESTINO</div>
+          <div class="font-bold text-sm text-white">BANCO & ERP</div>
+          <div class="text-[11px] text-zinc-400 mt-1">Sync em 12ms</div>
+        </div>
+      </div>
+
+      <!-- Live Stream de Logs -->
+      <div class="p-4 rounded-2xl bg-black/60 border border-white/10 font-mono text-[11px] sm:text-xs space-y-1.5">
+        <div class="text-zinc-500 font-bold pb-1 border-b border-white/5">TERMINAL DE OPERAÇÕES DO CLUSTER // LIVE STREAM</div>
+        <div class="text-emerald-400">[14:22:04.102] POST /api/v1/checkout/sync -> 200 OK (11ms) [Asaas Gateway]</div>
+        <div class="text-zinc-300">[14:22:04.288] WORKER #04: Triggering WhatsApp Dispatcher for Lead #9482</div>
+        <div class="text-cyan-400">[14:22:04.312] AI EMBEDDING: Vector Search completed in 8.4ms (cosine sim: 0.94)</div>
+        <div class="text-amber-400">[14:22:04.590] POSTGRESQL WAL: 1.480 transações/seg commitadas sem retenção de lock</div>
+        <div class="text-shn-red font-bold">[14:22:04.700] TELEMETRIA: Latência global estável em 14ms · Sistema 100% nominal</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SEÇÃO 4: OS 4 PILARES DA SHNORTH
+       ========================================================================= -->
+  <section class="py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-white/5">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <div class="inline-block px-2.5 py-0.5 rounded bg-white/10 text-zinc-300 font-mono text-[11px] font-bold tracking-wider mb-3">
+        03 · CAPACIDADES TÉCNICAS
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        Engenharia ponta a ponta.
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="p-6 rounded-2xl glass-card glass-card-interactive">
+        <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-4 font-mono font-bold">
+          01
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Sistemas Web & PWA</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">
+          Aplicações ultrarrápidas com Next.js, FastAPI e arquitetura moderna pronta para milhares de usuários simultâneos.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-2xl glass-card glass-card-interactive">
+        <div class="w-10 h-10 rounded-xl bg-shn-red/10 border border-shn-red/30 flex items-center justify-center text-shn-red mb-4 font-mono font-bold">
+          02
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Agentes de IA</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">
+          Automação conversacional profunda no WhatsApp com qualificação de leads, agendamentos e emissão de propostas.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-2xl glass-card glass-card-interactive">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-4 font-mono font-bold">
+          03
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Integrações de APIs</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">
+          Conexão de ERPs legados, CRMs, gateways de pagamento e webhooks assíncronos sem perda de transações.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-2xl glass-card glass-card-interactive">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-4 font-mono font-bold">
+          04
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Nuvem Blindada</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">
+          Infraestrutura em VPS/AWS isolada com failover automático, backups contínuos e 99.98% de SLA contratual.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SEÇÃO 5: FECHAMENTO & CTA EXECUTIVO
+       ========================================================================= -->
+  <section id="contato" class="py-24 px-4 sm:px-6 max-w-4xl mx-auto text-center border-t border-white/5">
+    <div class="glass-card p-8 sm:p-14 rounded-3xl border border-shn-red/30 shadow-2xl relative overflow-hidden">
+      <!-- Glow Central -->
+      <div class="absolute inset-0 bg-gradient-to-b from-shn-red/10 via-transparent to-transparent pointer-events-none"></div>
+
+      <div class="w-14 h-14 rounded-2xl bg-shn-red/20 text-shn-red border border-shn-red/40 flex items-center justify-center mx-auto mb-6 shadow-[0_0_25px_rgba(255,0,51,0.4)]">
         <svg class="w-7 h-7 text-shn-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="9" class="stroke-white/40" />
           <polygon points="12 4 15 12 12 10 9 12 12 4" fill="#ff0033" stroke="none" />
           <polygon points="12 20 15 12 12 14 9 12 12 20" fill="#ffffff" stroke="none" />
         </svg>
       </div>
-      <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
+
+      <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
         Pronto para transformar sua operação?
       </h2>
-      <p class="text-xs sm:text-sm text-zinc-300 mb-6 leading-relaxed max-w-sm mx-auto">
-        Converse diretamente com nosso time de engenharia e descubra como automatizar sua empresa com IA.
+      <p class="text-xs sm:text-base text-zinc-300 mb-8 max-w-lg mx-auto leading-relaxed">
+        Converse diretamente com nosso time de engenharia e receba uma avaliação de arquitetura para sua empresa.
       </p>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="https://wa.me/5551989871325?text=Ol%C3%A1!%20Gostaria%20de%20conhecer%20as%20solu%C3%A7%C3%B5es%20da%20Software%20House%20North." target="_blank" class="w-full sm:w-auto px-8 py-3.5 bg-shn-red hover:bg-red-600 text-white font-bold text-sm rounded-full shadow-lg shadow-shn-red/30 active:scale-95 transition-all cursor-pointer">
-          Falar no WhatsApp
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="https://wa.me/5551989871325?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20conversa%20técnica%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20Software%20House%20North." target="_blank" class="w-full sm:w-auto px-8 py-4 bg-shn-red hover:bg-red-600 text-white font-bold text-sm rounded-full shadow-lg shadow-shn-red/30 active:scale-95 transition-all cursor-pointer">
+          Falar no WhatsApp com Engenheiro
         </a>
-        <button onclick="window.scrollTo({top: 0, behavior: 'instant'})" class="w-full sm:w-auto px-6 py-3.5 bg-white/10 hover:bg-white/15 text-white font-mono text-xs rounded-full border border-white/10 transition-all cursor-pointer">
-          ↺ Rolar ao Início
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full sm:w-auto px-6 py-4 bg-white/5 hover:bg-white/10 text-white font-mono text-xs rounded-full border border-white/10 transition-all cursor-pointer">
+          ↺ Voltar ao Topo
         </button>
       </div>
     </div>
   </section>
 
-  <!-- =========================================================================
-       MOTOR DE SCROLLYTELLING APPLE (PRELOAD DE WEBP & 60 FPS CANVAS)
-       ========================================================================= -->
+  <!-- Rodapé Institucional -->
+  <footer class="py-8 px-6 border-t border-white/5 text-center font-mono text-xs text-zinc-500">
+    <div>© 2026 SOFTWARE HOUSE NORTH · TODOS OS DIREITOS RESERVADOS · SHNORTH.COM.BR</div>
+  </footer>
+
+  <!-- Script para Barra de Progresso Superior -->
   <script>
     (() => {
-      "use strict";
-
-      const canvas = document.getElementById("hero-lightpass");
-      const context = canvas.getContext("2d");
       const progressBar = document.getElementById("scroll-progress");
-
-      const FRAME_COUNT = 72;
-      const currentFrame = (index) => `frames_webp/frame_${index.toString().padStart(3, '0')}.webp`;
-
-      const images = [];
-      let loadedCount = 0;
-
-      // Ajusta tamanho nativo do Canvas
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        renderCurrentFrame();
-      }
-      window.addEventListener("resize", resizeCanvas);
-
-      // Desenha imagem com preenchimento responsivo (cover)
-      function drawImageProp(ctx, img) {
-        if (!img || !img.complete || img.naturalWidth === 0) return;
-
-        const cw = canvas.width, ch = canvas.height;
-        const iw = img.naturalWidth, ih = img.naturalHeight;
-        const r = Math.max(cw / iw, ch / ih);
-        
-        const nw = iw * r, nh = ih * r;
-        const cx = (cw - nw) * 0.5;
-        const cy = (ch - nh) * 0.5;
-
-        ctx.clearRect(0, 0, cw, ch);
-        ctx.drawImage(img, cx, cy, nw, nh);
-      }
-
-      let activeIndex = 0;
-
-      function renderCurrentFrame() {
-        const img = images[activeIndex];
-        if (img && img.complete) {
-          drawImageProp(context, img);
-        }
-      }
-
-      // Preload de todos os 72 frames em memória
-      for (let i = 0; i < FRAME_COUNT; i++) {
-        const img = new Image();
-        img.src = currentFrame(i);
-        img.onload = () => {
-          loadedCount++;
-          if (i === 0) {
-            resizeCanvas();
-          }
-        };
-        images.push(img);
-      }
-
-      // Listener de Scroll de Alto Desempenho
-      let ticking = false;
-
       function onScroll() {
         const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
         const progress = Math.max(0, Math.min(1, window.scrollY / (totalHeight || 1)));
-
         if (progressBar) {
           progressBar.style.width = (progress * 100) + '%';
         }
-
-        const frameIndex = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT));
-        if (frameIndex !== activeIndex) {
-          activeIndex = frameIndex;
-          if (!ticking) {
-            window.requestAnimationFrame(() => {
-              renderCurrentFrame();
-              ticking = false;
-            });
-            ticking = true;
-          }
-        }
       }
-
       window.addEventListener("scroll", onScroll, { passive: true });
-      resizeCanvas();
     })();
   </script>
 
